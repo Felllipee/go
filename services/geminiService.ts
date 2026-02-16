@@ -35,7 +35,7 @@ export const analyzeLinkMetadata = async (url: string): Promise<{ title: string;
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `Analise este URL: ${url}. 
-      1. Crie um título cinematográfico (máx 25 chars).
+      1. Crie um título cinematográfico impactante (máx 25 chars).
       2. Atribua um gênero de "streaming" (Ex: Ação, Drama, Documentário, Comédia, Suspense, Sci-Fi).
       Retorne em JSON.`,
       config: {
