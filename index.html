@@ -9,6 +9,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        // SHIM CRUCIAL: Impede que o app trave por falta do objeto 'process'
+        window.process = window.process || { env: { API_KEY: '' } };
+        
+        // Captura erros globais para ajudar no debug
+        window.onerror = function(msg, url, line, col, error) {
+            console.error("Erro Crítico detectado:", msg, "em", url, "linha:", line);
+            return false;
+        };
+    </script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -69,7 +79,6 @@
 </head>
 <body>
     <div id="root"></div>
-    <!-- Ponto de entrada crucial para o React funcionar -->
     <script type="module" src="index.tsx"></script>
 <script type="module" src="/index.tsx"></script>
 </body>

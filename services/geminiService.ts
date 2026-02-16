@@ -1,10 +1,15 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Inicialização segura
+const getAI = () => {
+  const apiKey = process.env.API_KEY || '';
+  return new GoogleGenAI({ apiKey });
+};
 
 export const suggestAlias = async (url: string): Promise<string[]> => {
   try {
+    const ai = getAI();
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `Sugira 3 nomes curtos (aliases) criativos e cativantes no estilo Netflix (como 'serie-vicio', 'pipoca-play', 'spoiler-link') para o seguinte URL: ${url}. Retorne apenas um array JSON de strings.`,
@@ -32,6 +37,7 @@ export const suggestAlias = async (url: string): Promise<string[]> => {
 
 export const analyzeLinkMetadata = async (url: string): Promise<{ title: string; category: string }> => {
   try {
+    const ai = getAI();
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `Analise este URL: ${url}. 

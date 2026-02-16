@@ -13,8 +13,8 @@ import {
   Play,
   TrendingUp
 } from 'lucide-react';
-import { AppState, ShortLink, UserProfile } from './types.ts';
-import { suggestAlias, analyzeLinkMetadata } from './services/geminiService.ts';
+import { AppState, ShortLink, UserProfile } from './types';
+import { suggestAlias, analyzeLinkMetadata } from './services/geminiService';
 
 const PROFILES: (UserProfile & { color: string })[] = [
   { id: '1', name: 'Naruto Uzumaki', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Naruto&backgroundColor=f59e0b', color: '#f59e0b' },
@@ -81,7 +81,13 @@ const FastShortsPro: React.FC = () => {
 
   useEffect(() => {
     const saved = localStorage.getItem('fastshorts_pro_links');
-    if (saved) setLinks(JSON.parse(saved));
+    if (saved) {
+      try {
+        setLinks(JSON.parse(saved));
+      } catch (e) {
+        console.error("Erro ao carregar links do localStorage", e);
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -118,6 +124,9 @@ const FastShortsPro: React.FC = () => {
       setAliasInput('');
       setSuggestedAliases([]);
       setCurrentPage(AppState.CATALOG);
+    } catch (err) {
+      console.error("Erro ao criar link:", err);
+      alert("Erro ao gerar link cinematográfico.");
     } finally {
       setIsProcessing(false);
     }
@@ -142,8 +151,13 @@ const FastShortsPro: React.FC = () => {
     // Garante que o caminho base termine em / para o redirecionamento funcionar
     const basePath = url.pathname.endsWith('/') ? url.pathname : url.pathname + '/';
     const shortUrl = `${url.origin}${basePath}${code}`;
-    navigator.clipboard.writeText(shortUrl);
-    alert("🎬 Link copiado para o catálogo!");
+    
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(shortUrl);
+      alert("🎬 Link copiado para o catálogo!");
+    } else {
+      alert("Link: " + shortUrl);
+    }
   };
 
   const themeColor = activeProfile?.color || '#E50914';
